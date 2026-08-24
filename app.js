@@ -1,6 +1,37 @@
 const SUPABASE_URL = 'https://zmwjyugswbewcecuxlby.supabase.co';
 const SUPABASE_KEY ='sb_publishable_cPdfegzmynPephjlrtyUxA_dd-7yNjl ';
+async function sendToSupabase(submissionType, formData) {
+  const payload = {
+    submission_type: submissionType,
+    name: formData.name || '',
+    email: formData.email || '',
+    phone: formData.phone || '',
+    title: formData.title || '',
+    description: formData.description || '',
+    event_date: formData.event_date || null,
+    event_time: formData.event_time || null,
+    appointment_date: formData.appointment_date || null,
+    appointment_time: formData.appointment_time || null,
+    status: 'Pending',
+    form_data: formData
+  };
 
+  const response = await fetch(`${SUPABASE_URL}/rest/v1/submissions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Prefer': 'return=minimal'
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText);
+  }
+}
 const KEY = 'churchRequestFormsSubmissionDataV4';
 const defaults = {purchases:[], invoices:[], requests:[], events:[], appointments:[]};
 const data = Object.assign(defaults, JSON.parse(localStorage.getItem(KEY) || '{}'));
@@ -24,7 +55,34 @@ eventForm.onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);data.ev
 appointmentForm.onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);data.appointments.unshift({id:Date.now(),number:nextNo('APT',data.appointments),requester:f.get('requester'),phone:f.get('phone'),email:f.get('email'),withWhom:f.get('withWhom'),date:f.get('date'),time:f.get('time'),reason:f.get('reason'),notes:f.get('notes'),status:'Pending'});e.target.reset();setToday();save()};
 signupHeadingForm.onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);data.signupHeading={title:f.get('title'),subtitle:f.get('subtitle'),description:f.get('description')};save()};
 signupForm.onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);data.signups.unshift({id:Date.now(),number:nextNo('SIGN',data.signups),name:f.get('name'),phone:f.get('phone'),email:f.get('email'),ministry:f.get('ministry'),activity:f.get('activity'),date:f.get('date'),time:f.get('time'),people:+f.get('people'),notes:f.get('notes')});e.target.reset();setToday();save()};
+function formObject(form) {
+  return Object.fromEntries(new FormData(form).entries());
+}
 
+requestForm.addEventListener('submit', () => {
+  sendToSupabase('request', formObject(requestForm))
+    .catch(err => console.error('Supabase request error:', err));
+});
+
+eventForm.addEventListener('submit', () => {
+  const x = formObject(eventForm);
+  x.event_date = x.event_date || x.date || x.eventDate || null;
+  x.event_time = x.event_time || x.time || x.eventTime || null;
+
+  sendToSupabase('event', x)
+    .catch(err => console.error('Supabase event error:', err));
+});
+
+appointmentForm.addEventListener('submit', () => {
+  const x = formObject(appointmentForm);
+  x.appointment_date =
+    x.appointment_date || x.date || x.appointmentDate || null;
+  x.appointment_time =
+    x.appointment_time || x.time || x.appointmentTime || null;
+
+  sendToSupabase('appointment', x)
+    .catch(err => console.error('Supabase appointment error:', err));
+});
 function updateStatus(type,id,value){const r=data[type].find(x=>x.id===id);if(r){r.status=value;save()}}
 function statusSelect(type,r){return `<select onchange="updateStatus('${type}',${r.id},this.value)"><option ${r.status==='Pending'?'selected':''}>Pending</option><option ${r.status==='Approved'?'selected':''}>Approved</option><option ${r.status==='Rejected'?'selected':''}>Rejected</option></select>`}
 function printInvoice(id){const inv=data.invoices.find(x=>x.id===id);if(!inv)return;const host=document.createElement('div');host.className='print-host';const node=document.getElementById('invoiceTemplate').content.cloneNode(true);Object.entries(inv).forEach(([k,v])=>node.querySelectorAll(`[data-field="${k}"]`).forEach(el=>el.textContent=(['price','total'].includes(k)?money(v):v||'')));host.appendChild(node);document.body.appendChild(host);window.print();host.remove()}
