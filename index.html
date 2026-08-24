@@ -7,73 +7,194 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="topbar">
-  <div><h1>Church Request Forms Submission</h1><p>Purchases • Invoices • Requests • Tracking</p></div>
-  <button id="exportBtn" class="secondary">Export Data</button>
-</header>
-<nav class="tabs">
-  <button class="tab active" data-view="dashboard">Dashboard</button>
-  <button class="tab" data-view="purchase">Record Purchase</button>
-  <button class="tab" data-view="invoice">Create Invoice</button>
-  <button class="tab" data-view="request">Create Request</button>
-  <button class="tab" data-view="submitted">Submitted Requests</button>
-</nav>
-<main>
-<section id="dashboard" class="view active">
-  <h2>Dashboard</h2>
-  <div class="cards">
-    <article class="card"><span>Purchases</span><strong id="purchaseCount">0</strong></article>
-    <article class="card"><span>Invoices</span><strong id="invoiceCount">0</strong></article>
-    <article class="card"><span>Pending Requests</span><strong id="pendingCount">0</strong></article>
-    <article class="card"><span>Approved Requests</span><strong id="approvedCount">0</strong></article>
-  </div>
-  <div class="panel"><h3>Recent Activity</h3><div id="recentActivity" class="empty">No activity yet.</div></div>
-</section>
-<section id="purchase" class="view">
-  <h2>Record Purchase</h2>
-  <form id="purchaseForm" class="form-grid">
-    <label>Purchase Date<input type="date" name="date" required></label>
-    <label>Vendor<input type="text" name="vendor" required></label>
-    <label>Item / Service<input type="text" name="item" required></label>
-    <label>Amount ($)<input type="number" name="amount" min="0" step="0.01" required></label>
-    <label>Payment Method<select name="payment"><option>Church Card</option><option>Check</option><option>Cash</option><option>Reimbursement</option><option>Other</option></select></label>
-    <label>Reference / Receipt #<input type="text" name="reference"></label>
-    <label class="full">Notes<textarea name="notes" rows="3"></textarea></label>
-    <button type="submit" class="primary">Save Purchase</button>
-  </form>
-  <div class="panel"><h3>Purchase Records</h3><div class="table-wrap"><table><thead><tr><th>Date</th><th>Vendor</th><th>Item</th><th>Amount</th><th>Reference</th></tr></thead><tbody id="purchaseRows"></tbody></table></div></div>
-</section>
-<section id="invoice" class="view">
-  <h2>Create Invoice</h2>
-  <form id="invoiceForm" class="form-grid">
-    <label>Invoice Date<input type="date" name="date" required></label>
-    <label>Due Date<input type="date" name="due" required></label>
-    <label>Bill To<input type="text" name="billTo" required></label>
-    <label>Description<input type="text" name="description" required></label>
-    <label>Quantity<input type="number" name="qty" min="1" value="1" required></label>
-    <label>Unit Price ($)<input type="number" name="price" min="0" step="0.01" required></label>
-    <label class="full">Notes<textarea name="notes" rows="3"></textarea></label>
-    <button type="submit" class="primary">Create Invoice</button>
-  </form>
-  <div class="panel"><h3>Invoices</h3><div class="table-wrap"><table><thead><tr><th>Invoice #</th><th>Date</th><th>Bill To</th><th>Total</th><th>Action</th></tr></thead><tbody id="invoiceRows"></tbody></table></div></div>
-</section>
-<section id="request" class="view">
-  <h2>Create Request</h2>
-  <form id="requestForm" class="form-grid">
-    <label>Requester Name<input type="text" name="requester" required></label>
-    <label>Department / Ministry<input type="text" name="department"></label>
-    <label>Request Date<input type="date" name="date" required></label>
-    <label>Amount Requested ($)<input type="number" name="amount" min="0" step="0.01" required></label>
-    <label class="full">Request Description<textarea name="description" rows="3" required></textarea></label>
-    <label class="full">Business Purpose / Reason<textarea name="reason" rows="3" required></textarea></label>
-    <button type="submit" class="primary">Submit Request</button>
-  </form>
-</section>
-<section id="submitted" class="view">
-  <h2>Submitted Requests</h2>
-  <div class="panel"><div class="table-wrap"><table><thead><tr><th>Request #</th><th>Date</th><th>Requester</th><th>Department</th><th>Amount</th><th>Status</th><th>Update</th></tr></thead><tbody id="requestRows"></tbody></table></div></div>
-</section>
-</main>
-<script src="app.js"></script>
+  <header class="topbar">
+    <div>
+      <h1>Church Request Forms Submission</h1>
+      <p>Purchases • Invoices • Requests • Events • Appointments • Sign Up Sheets</p>
+    </div>
+    <button id="exportBtn" class="secondary">Export Data</button>
+  </header>
+
+  <nav class="tabs" aria-label="Main navigation">
+    <button class="tab active" data-view="dashboard">Dashboard</button>
+    <button class="tab" data-view="purchase">Record Purchase</button>
+    <button class="tab" data-view="invoice">Create Invoice</button>
+    <button class="tab" data-view="request">Create Request</button>
+    <button class="tab" data-view="event">Event Request</button>
+    <button class="tab" data-view="appointment">Appointment Request</button>
+    <button class="tab" data-view="signup">Create Sign Up Sheet</button>
+    <button class="tab" data-view="submitted">Submitted Requests</button>
+  </nav>
+
+  <main>
+    <section id="dashboard" class="view active">
+      <h2>Dashboard</h2>
+      <div class="cards">
+        <article class="card"><span>Purchases</span><strong id="purchaseCount">0</strong></article>
+        <article class="card"><span>Invoices</span><strong id="invoiceCount">0</strong></article>
+        <article class="card"><span>Pending Requests</span><strong id="pendingCount">0</strong></article>
+        <article class="card"><span>Event Requests</span><strong id="eventCount">0</strong></article>
+        <article class="card"><span>Appointment Requests</span><strong id="appointmentCount">0</strong></article>
+        <article class="card"><span>Sign Ups</span><strong id="signupCount">0</strong></article>
+      </div>
+      <div class="panel">
+        <h3>Recent Activity</h3>
+        <div id="recentActivity" class="empty">No activity yet.</div>
+      </div>
+    </section>
+
+    <section id="purchase" class="view">
+      <h2>Record Purchase</h2>
+      <form id="purchaseForm" class="form-grid">
+        <label>Purchase Date<input type="date" name="date" required></label>
+        <label>Vendor<input type="text" name="vendor" required></label>
+        <label>Item / Service<input type="text" name="item" required></label>
+        <label>Amount ($)<input type="number" name="amount" min="0" step="0.01" required></label>
+        <label>Payment Method
+          <select name="payment">
+            <option>Church Card</option><option>Check</option><option>Cash</option><option>Reimbursement</option><option>Other</option>
+          </select>
+        </label>
+        <label>Reference / Receipt #<input type="text" name="reference"></label>
+        <label class="full">Notes<textarea name="notes" rows="3"></textarea></label>
+        <button type="submit" class="primary">Save Purchase</button>
+      </form>
+      <div class="panel">
+        <h3>Purchase Records</h3>
+        <div class="table-wrap"><table><thead><tr><th>Date</th><th>Vendor</th><th>Item</th><th>Amount</th><th>Reference</th></tr></thead><tbody id="purchaseRows"></tbody></table></div>
+      </div>
+    </section>
+
+    <section id="invoice" class="view">
+      <h2>Create Invoice</h2>
+      <form id="invoiceForm" class="form-grid">
+        <label>Invoice Date<input type="date" name="date" required></label>
+        <label>Due Date<input type="date" name="due" required></label>
+        <label>Bill To<input type="text" name="billTo" required></label>
+        <label>Description<input type="text" name="description" required></label>
+        <label>Quantity<input type="number" name="qty" min="1" value="1" required></label>
+        <label>Unit Price ($)<input type="number" name="price" min="0" step="0.01" required></label>
+        <label class="full">Notes<textarea name="notes" rows="3"></textarea></label>
+        <button type="submit" class="primary">Create Invoice</button>
+      </form>
+      <div class="panel">
+        <h3>Invoices</h3>
+        <div class="table-wrap"><table><thead><tr><th>Invoice #</th><th>Date</th><th>Bill To</th><th>Total</th><th>Action</th></tr></thead><tbody id="invoiceRows"></tbody></table></div>
+      </div>
+    </section>
+
+    <section id="request" class="view">
+      <h2>Create Request</h2>
+      <form id="requestForm" class="form-grid">
+        <label>Requester Name<input type="text" name="requester" required></label>
+        <label>Department / Ministry<input type="text" name="department"></label>
+        <label>Request Date<input type="date" name="date" required></label>
+        <label>Amount Requested ($)<input type="number" name="amount" min="0" step="0.01" required></label>
+        <label class="full">Request Description<textarea name="description" rows="3" required></textarea></label>
+        <label class="full">Business Purpose / Reason<textarea name="reason" rows="3" required></textarea></label>
+        <button type="submit" class="primary">Submit Request</button>
+      </form>
+    </section>
+
+    <section id="event" class="view">
+      <h2>Event Request Submission</h2>
+      <form id="eventForm" class="form-grid">
+        <label>Requester Name<input type="text" name="requester" required></label>
+        <label>Department / Ministry<input type="text" name="department"></label>
+        <label>Event Name<input type="text" name="eventName" required></label>
+        <label>Event Date<input type="date" name="eventDate" required></label>
+        <label>Start Time<input type="time" name="startTime" required></label>
+        <label>End Time<input type="time" name="endTime" required></label>
+        <label>Location / Room<input type="text" name="location" required></label>
+        <label>Estimated Attendance<input type="number" name="attendance" min="1"></label>
+        <label class="full">Event Purpose / Description<textarea name="description" rows="3" required></textarea></label>
+        <label class="full">Special Needs / Setup<textarea name="setup" rows="3"></textarea></label>
+        <button type="submit" class="primary">Submit Event Request</button>
+      </form>
+    </section>
+
+    <section id="appointment" class="view">
+      <h2>Appointment Request Submission</h2>
+      <form id="appointmentForm" class="form-grid">
+        <label>Requester Name<input type="text" name="requester" required></label>
+        <label>Phone Number<input type="tel" name="phone" required></label>
+        <label>Email<input type="email" name="email"></label>
+        <label>Person / Office Requested<input type="text" name="withWhom" required></label>
+        <label>Preferred Date<input type="date" name="date" required></label>
+        <label>Preferred Time<input type="time" name="time" required></label>
+        <label class="full">Reason for Appointment<textarea name="reason" rows="3" required></textarea></label>
+        <label class="full">Additional Notes<textarea name="notes" rows="3"></textarea></label>
+        <button type="submit" class="primary">Submit Appointment Request</button>
+      </form>
+    </section>
+
+    <section id="signup" class="view">
+      <h2>Create Sign Up Sheet</h2>
+      <p class="intro">Create a custom sign-up sheet with your own title and subtitle, then add participants below.</p>
+
+      <div class="panel">
+        <h3>Sign Up Sheet Heading</h3>
+        <form id="signupHeadingForm" class="form-grid">
+          <label>Sheet Title<input type="text" name="title" placeholder="Example: Church Picnic Volunteers" required></label>
+          <label>Subtitle<input type="text" name="subtitle" placeholder="Example: Saturday, September 12 • 10:00 AM"></label>
+          <label class="full">Instructions / Description<textarea name="description" rows="3" placeholder="Add any instructions for people signing up."></textarea></label>
+          <button type="submit" class="primary">Create / Update Sheet</button>
+        </form>
+      </div>
+
+      <div class="signup-preview panel">
+        <p class="eyebrow">SIGN UP SHEET</p>
+        <h2 id="signupTitlePreview">Church Sign Up Sheet</h2>
+        <h3 id="signupSubtitlePreview" class="subtitle-preview"></h3>
+        <p id="signupDescriptionPreview" class="intro"></p>
+      </div>
+
+      <form id="signupForm" class="form-grid">
+        <label>Full Name<input type="text" name="name" required></label>
+        <label>Phone Number<input type="tel" name="phone" required></label>
+        <label>Email<input type="email" name="email"></label>
+        <label>Ministry / Group<input type="text" name="ministry"></label>
+        <label>Sign Up For<input type="text" name="activity" placeholder="Volunteer role, meal item, class, activity, etc." required></label>
+        <label>Date<input type="date" name="date" required></label>
+        <label>Time<input type="time" name="time"></label>
+        <label>Number of People<input type="number" name="people" min="1" value="1" required></label>
+        <label class="full">Notes / Special Request<textarea name="notes" rows="3"></textarea></label>
+        <button type="submit" class="primary">Submit Sign Up</button>
+      </form>
+
+      <div class="panel">
+        <h3>Sign Up List</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Sign Up #</th><th>Name</th><th>Activity</th><th>Date</th><th>Time</th><th>People</th><th>Phone</th></tr></thead>
+          <tbody id="signupRows"></tbody>
+        </table></div>
+      </div>
+    </section>
+
+    <section id="submitted" class="view">
+      <h2>Submitted Requests</h2>
+      <div class="panel"><h3>General Requests</h3><div class="table-wrap"><table><thead><tr><th>Request #</th><th>Date</th><th>Requester</th><th>Department</th><th>Amount</th><th>Status</th><th>Update</th></tr></thead><tbody id="requestRows"></tbody></table></div></div>
+      <div class="panel"><h3>Event Requests</h3><div class="table-wrap"><table><thead><tr><th>Event #</th><th>Date</th><th>Time</th><th>Event</th><th>Requester</th><th>Location</th><th>Status</th><th>Update</th></tr></thead><tbody id="eventRows"></tbody></table></div></div>
+      <div class="panel"><h3>Appointment Requests</h3><div class="table-wrap"><table><thead><tr><th>Appointment #</th><th>Date</th><th>Time</th><th>Requester</th><th>With</th><th>Phone</th><th>Status</th><th>Update</th></tr></thead><tbody id="appointmentRows"></tbody></table></div></div>
+    </section>
+  </main>
+
+  <template id="invoiceTemplate">
+    <div class="print-invoice">
+      <h1>Church Request Forms Submission</h1>
+      <h2>Invoice <span data-field="number"></span></h2>
+      <p><strong>Date:</strong> <span data-field="date"></span></p>
+      <p><strong>Due:</strong> <span data-field="due"></span></p>
+      <p><strong>Bill To:</strong> <span data-field="billTo"></span></p>
+      <hr>
+      <p><strong>Description:</strong> <span data-field="description"></span></p>
+      <p><strong>Quantity:</strong> <span data-field="qty"></span></p>
+      <p><strong>Unit Price:</strong> $<span data-field="price"></span></p>
+      <h3>Total: $<span data-field="total"></span></h3>
+      <p><strong>Notes:</strong> <span data-field="notes"></span></p>
+    </div>
+  </template>
+
+  <script src="app.js"></script>
 </body>
 </html>
