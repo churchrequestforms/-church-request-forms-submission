@@ -1,8 +1,11 @@
-const KEY='churchRequestFormsSubmissionDataV4';
-const defaults={purchases:[],invoices:[],requests:[],events:[],appointments:[],signups:[],signupHeading:{title:'Church Sign Up Sheet',subtitle:'',description:''}};
-const data=Object.assign(defaults,JSON.parse(localStorage.getItem(KEY)||'{}'));
-data.signupHeading=Object.assign(defaults.signupHeading,data.signupHeading||{});
-const save=()=>{localStorage.setItem(KEY,JSON.stringify(data));render()};
+const SUPABASE_URL = 'https://zmwjyugswbewcecuxlby.supabase.co';
+const SUPABASE_KEY ='sb_publishable_cPdfegzmynPephjlrtyUxA_dd-7yNjl ';
+
+const KEY = 'churchRequestFormsSubmissionDataV4';
+const defaults = {purchases:[], invoices:[], requests:[], events:[], appointments:[]};
+const data = Object.assign(defaults, JSON.parse(localStorage.getItem(KEY) || '{}'));
+data.signupHeading = Object.assign(defaults.signupHeading || {}, data.signupHeading || {});
+const save = () => { localStorage.setItem(KEY, JSON.stringify(data)); };
 const money=n=>Number(n||0).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
 const nextNo=(prefix,arr)=>`${prefix}-${new Date().getFullYear()}-${String(arr.length+1).padStart(3,'0')}`;
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
