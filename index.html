@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Church Request Forms Submission</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div><h1>Church Request Forms Submission</h1><p>Purchases • Invoices • Requests • Tracking</p></div>
+  <button id="exportBtn" class="secondary">Export Data</button>
+</header>
+<nav class="tabs">
+  <button class="tab active" data-view="dashboard">Dashboard</button>
+  <button class="tab" data-view="purchase">Record Purchase</button>
+  <button class="tab" data-view="invoice">Create Invoice</button>
+  <button class="tab" data-view="request">Create Request</button>
+  <button class="tab" data-view="submitted">Submitted Requests</button>
+</nav>
+<main>
+<section id="dashboard" class="view active">
+  <h2>Dashboard</h2>
+  <div class="cards">
+    <article class="card"><span>Purchases</span><strong id="purchaseCount">0</strong></article>
+    <article class="card"><span>Invoices</span><strong id="invoiceCount">0</strong></article>
+    <article class="card"><span>Pending Requests</span><strong id="pendingCount">0</strong></article>
+    <article class="card"><span>Approved Requests</span><strong id="approvedCount">0</strong></article>
+  </div>
+  <div class="panel"><h3>Recent Activity</h3><div id="recentActivity" class="empty">No activity yet.</div></div>
+</section>
+<section id="purchase" class="view">
+  <h2>Record Purchase</h2>
+  <form id="purchaseForm" class="form-grid">
+    <label>Purchase Date<input type="date" name="date" required></label>
+    <label>Vendor<input type="text" name="vendor" required></label>
+    <label>Item / Service<input type="text" name="item" required></label>
+    <label>Amount ($)<input type="number" name="amount" min="0" step="0.01" required></label>
+    <label>Payment Method<select name="payment"><option>Church Card</option><option>Check</option><option>Cash</option><option>Reimbursement</option><option>Other</option></select></label>
+    <label>Reference / Receipt #<input type="text" name="reference"></label>
+    <label class="full">Notes<textarea name="notes" rows="3"></textarea></label>
+    <button type="submit" class="primary">Save Purchase</button>
+  </form>
+  <div class="panel"><h3>Purchase Records</h3><div class="table-wrap"><table><thead><tr><th>Date</th><th>Vendor</th><th>Item</th><th>Amount</th><th>Reference</th></tr></thead><tbody id="purchaseRows"></tbody></table></div></div>
+</section>
+<section id="invoice" class="view">
+  <h2>Create Invoice</h2>
+  <form id="invoiceForm" class="form-grid">
+    <label>Invoice Date<input type="date" name="date" required></label>
+    <label>Due Date<input type="date" name="due" required></label>
+    <label>Bill To<input type="text" name="billTo" required></label>
+    <label>Description<input type="text" name="description" required></label>
+    <label>Quantity<input type="number" name="qty" min="1" value="1" required></label>
+    <label>Unit Price ($)<input type="number" name="price" min="0" step="0.01" required></label>
+    <label class="full">Notes<textarea name="notes" rows="3"></textarea></label>
+    <button type="submit" class="primary">Create Invoice</button>
+  </form>
+  <div class="panel"><h3>Invoices</h3><div class="table-wrap"><table><thead><tr><th>Invoice #</th><th>Date</th><th>Bill To</th><th>Total</th><th>Action</th></tr></thead><tbody id="invoiceRows"></tbody></table></div></div>
+</section>
+<section id="request" class="view">
+  <h2>Create Request</h2>
+  <form id="requestForm" class="form-grid">
+    <label>Requester Name<input type="text" name="requester" required></label>
+    <label>Department / Ministry<input type="text" name="department"></label>
+    <label>Request Date<input type="date" name="date" required></label>
+    <label>Amount Requested ($)<input type="number" name="amount" min="0" step="0.01" required></label>
+    <label class="full">Request Description<textarea name="description" rows="3" required></textarea></label>
+    <label class="full">Business Purpose / Reason<textarea name="reason" rows="3" required></textarea></label>
+    <button type="submit" class="primary">Submit Request</button>
+  </form>
+</section>
+<section id="submitted" class="view">
+  <h2>Submitted Requests</h2>
+  <div class="panel"><div class="table-wrap"><table><thead><tr><th>Request #</th><th>Date</th><th>Requester</th><th>Department</th><th>Amount</th><th>Status</th><th>Update</th></tr></thead><tbody id="requestRows"></tbody></table></div></div>
+</section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
